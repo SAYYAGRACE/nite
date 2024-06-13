@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nite</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        #header {
+            background-color: #4B89FF;
+            color: white;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        #logo {
+            width: 50px;
+            height: auto;
+            margin-right: 10px;
+        }
+        #tabs {
+            display: flex;
+            padding: 10px;
+            overflow-x: auto;
+            background-color: #f0f0f0;
+        }
+        .tab {
+            padding: 5px 10px;
+            margin-right: 10px;
+            background-color: #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .tab.active {
+            background-color: #4B89FF;
+            color: white;
+        }
+        #content {
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="header">
+        <div>
+            <img id="logo" src="logo-black-removebg-preview.png" alt="Nite">
+           Nite Browser
+        </div>
+        <div>
+            <button id="backBtn">Back</button>
+            <button id="forwardBtn">Forward</button>
+            <input type="text" id="urlInput" placeholder="Enter URL">
+            <button id="goBtn">Go</button>
+            <button id="bookmarkBtn">Bookmark</button>
+        </div>
+    </div>
+    <div id="tabs"></div>
+    <div id="content">
+        <iframe id="browserFrame" width="100%" height="500px" frameborder="0"></iframe>
+    </div>
+
+    <script>
+        const tabsContainer = document.getElementById('tabs');
+        const browserFrame = document.getElementById('browserFrame');
+        const urlInput = document.getElementById('urlInput');
+        const goBtn = document.getElementById('goBtn');
+        const backBtn = document.getElementById('backBtn');
+        const forwardBtn = document.getElementById('forwardBtn');
+        const bookmarkBtn = document.getElementById('bookmarkBtn');
+
+       
+        function createTab(url) {
+            const tab = document.createElement('div');
+            tab.classList.add('tab');
+            tab.textContent = url;
+            tab.addEventListener('click', () => {
+                browserFrame.src = url;
+                tabsContainer.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+            });
+            tabsContainer.appendChild(tab);
+        }
+
+       
+        backBtn.addEventListener('click', () => browserFrame.contentWindow.history.back());
+        forwardBtn.addEventListener('click', () => browserFrame.contentWindow.history.forward());
+
+        goBtn.addEventListener('click', () => {
+            const url = urlInput.value;
+            if (url.trim() !== '') {
+                browserFrame.src = url;
+                createTab(url);
+            }
+        });
+
+      
+        bookmarkBtn.addEventListener('click', () => {
+            const currentUrl = browserFrame.src;
+           
+            alert('Bookmark added for ' + currentUrl);
+        });
+
+        
+        createTab('https://www.example.com');
+        createTab('https://www.google.com');
+    </script>
+</body>
+</html>
